@@ -102,38 +102,57 @@ const Products: CollectionConfig = {
         },
       ],
     },
+
     {
-      name: 'specifications',
-      type: 'group',
-      fields: [
+      type: 'tabs',
+      tabs: [
         {
-          name: 'deity',
-          type: 'select',
-          options: [
-            { label: 'Ganesha', value: 'ganesha' },
-            { label: 'Shiva', value: 'shiva' },
-            { label: 'Krishna', value: 'krishna' },
-            { label: 'Lakshmi', value: 'lakshmi' },
-            { label: 'Hanuman', value: 'hanuman' },
-            { label: 'Durga', value: 'durga' },
+          label: 'Deity',
+          fields: [
+            {
+              name: 'deity',
+              type: 'select',
+              options: [
+                { label: 'Ganesha', value: 'ganesha' },
+                { label: 'Shiva', value: 'shiva' },
+                { label: 'Krishna', value: 'krishna' },
+                { label: 'Lakshmi', value: 'lakshmi' },
+                { label: 'Hanuman', value: 'hanuman' },
+                { label: 'Durga', value: 'durga' },
+              ],
+              required: true,
+            },
           ],
-          required: true,
         },
         {
-          name: 'material',
-          type: 'select',
-          options: [
-            { label: 'Brass', value: 'brass' },
-            { label: 'Bronze', value: 'bronze' },
-            { label: 'Marble', value: 'marble' },
-            { label: 'Resin', value: 'resin' },
-            { label: 'Wood', value: 'wood' },
+          label: 'Material',
+          fields: [
+            {
+              name: 'material',
+              type: 'select',
+              options: [
+                { label: 'Brass', value: 'brass' },
+                { label: 'Bronze', value: 'bronze' },
+                { label: 'Marble', value: 'marble' },
+                { label: 'Resin', value: 'resin' },
+                { label: 'Wood', value: 'wood' },
+              ],
+              required: true,
+            },
+            {
+              name: 'finish',
+              type: 'select',
+              options: [
+                { label: 'Polished', value: 'polished' },
+                { label: 'Antique', value: 'antique' },
+                { label: 'Matte', value: 'matte' },
+                { label: 'Gold Plated', value: 'gold-plated' },
+              ],
+            },
           ],
-          required: true,
         },
         {
-          name: 'dimensions',
-          type: 'group',
+          label: 'Dimensions',
           fields: [
             {
               name: 'height',
@@ -150,32 +169,29 @@ const Products: CollectionConfig = {
               type: 'number',
               required: true,
             },
+            {
+              name: 'weight',
+              type: 'number',
+              required: true,
+            },
           ],
         },
+
         {
-          name: 'weight',
-          type: 'number',
-          required: true,
-        },
-        {
-          name: 'finish',
-          type: 'select',
-          options: [
-            { label: 'Polished', value: 'polished' },
-            { label: 'Antique', value: 'antique' },
-            { label: 'Matte', value: 'matte' },
-            { label: 'Gold Plated', value: 'gold-plated' },
+          label: 'Origin',
+          fields: [
+            {
+              name: 'origin',
+              type: 'text',
+              admin: {
+                description: 'Where the statue was made',
+              },
+            },
           ],
-        },
-        {
-          name: 'origin',
-          type: 'text',
-          admin: {
-            description: 'Where the statue was made',
-          },
         },
       ],
     },
+
     {
       name: 'inventory',
       type: 'group',

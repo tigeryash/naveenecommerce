@@ -202,21 +202,17 @@ export interface Product {
     alt: string;
     id?: string | null;
   }[];
-  specifications: {
-    deity: 'ganesha' | 'shiva' | 'krishna' | 'lakshmi' | 'hanuman' | 'durga';
-    material: 'brass' | 'bronze' | 'marble' | 'resin' | 'wood';
-    dimensions: {
-      height: number;
-      width: number;
-      depth: number;
-    };
-    weight: number;
-    finish?: ('polished' | 'antique' | 'matte' | 'gold-plated') | null;
-    /**
-     * Where the statue was made
-     */
-    origin?: string | null;
-  };
+  deity: 'ganesha' | 'shiva' | 'krishna' | 'lakshmi' | 'hanuman' | 'durga';
+  material: 'brass' | 'bronze' | 'marble' | 'resin' | 'wood';
+  finish?: ('polished' | 'antique' | 'matte' | 'gold-plated') | null;
+  height: number;
+  width: number;
+  depth: number;
+  weight: number;
+  /**
+   * Where the statue was made
+   */
+  origin?: string | null;
   inventory: {
     quantity: number;
     /**
@@ -460,22 +456,14 @@ export interface ProductsSelect<T extends boolean = true> {
         alt?: T;
         id?: T;
       };
-  specifications?:
-    | T
-    | {
-        deity?: T;
-        material?: T;
-        dimensions?:
-          | T
-          | {
-              height?: T;
-              width?: T;
-              depth?: T;
-            };
-        weight?: T;
-        finish?: T;
-        origin?: T;
-      };
+  deity?: T;
+  material?: T;
+  finish?: T;
+  height?: T;
+  width?: T;
+  depth?: T;
+  weight?: T;
+  origin?: T;
   inventory?:
     | T
     | {
