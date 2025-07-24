@@ -3,6 +3,7 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { revalidateDelete, revalidatePost } from './hooks/revalidateProduct'
 import { populateAuthors } from './hooks/populateAuthors'
+import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 
 const Products: CollectionConfig = {
   slug: 'products',
@@ -16,6 +17,23 @@ const Products: CollectionConfig = {
     useAsTitle: 'title', // This field shows in admin list
     defaultColumns: ['title', 'price', 'inventory.quantity', 'status'],
     group: 'Shop', // Groups collections in admin sidebar
+    livePreview: {
+      url: ({ data, req }) => {
+        const path = generatePreviewPath({
+          slug: typeof data?.slug === 'string' ? data.slug : '',
+          collection: 'products',
+          req,
+        })
+
+        return path
+      },
+    },
+    preview: (data, { req }) =>
+      generatePreviewPath({
+        slug: typeof data?.slug === 'string' ? data.slug : '',
+        collection: 'products',
+        req,
+      }),
   },
   defaultPopulate: {
     title: true,
