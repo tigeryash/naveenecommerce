@@ -125,7 +125,7 @@ const Products: CollectionConfig = {
           ],
         },
         {
-          label: 'Material',
+          label: 'Materials',
           fields: [
             {
               name: 'material',
@@ -176,7 +176,6 @@ const Products: CollectionConfig = {
             },
           ],
         },
-
         {
           label: 'Origin',
           fields: [
