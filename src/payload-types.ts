@@ -202,9 +202,6 @@ export interface Product {
     alt: string;
     id?: string | null;
   }[];
-  deity: 'ganesha' | 'shiva' | 'krishna' | 'lakshmi' | 'hanuman' | 'durga';
-  material: 'brass' | 'bronze' | 'marble' | 'resin' | 'wood';
-  finish?: ('polished' | 'antique' | 'matte' | 'gold-plated') | null;
   height: number;
   width: number;
   depth: number;
@@ -456,9 +453,6 @@ export interface ProductsSelect<T extends boolean = true> {
         alt?: T;
         id?: T;
       };
-  deity?: T;
-  material?: T;
-  finish?: T;
   height?: T;
   width?: T;
   depth?: T;

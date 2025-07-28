@@ -107,51 +107,6 @@ const Products: CollectionConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: 'Deity',
-          fields: [
-            {
-              name: 'deity',
-              type: 'select',
-              options: [
-                { label: 'Ganesha', value: 'ganesha' },
-                { label: 'Shiva', value: 'shiva' },
-                { label: 'Krishna', value: 'krishna' },
-                { label: 'Lakshmi', value: 'lakshmi' },
-                { label: 'Hanuman', value: 'hanuman' },
-                { label: 'Durga', value: 'durga' },
-              ],
-              required: true,
-            },
-          ],
-        },
-        {
-          label: 'Materials',
-          fields: [
-            {
-              name: 'material',
-              type: 'select',
-              options: [
-                { label: 'Brass', value: 'brass' },
-                { label: 'Bronze', value: 'bronze' },
-                { label: 'Marble', value: 'marble' },
-                { label: 'Resin', value: 'resin' },
-                { label: 'Wood', value: 'wood' },
-              ],
-              required: true,
-            },
-            {
-              name: 'finish',
-              type: 'select',
-              options: [
-                { label: 'Polished', value: 'polished' },
-                { label: 'Antique', value: 'antique' },
-                { label: 'Matte', value: 'matte' },
-                { label: 'Gold Plated', value: 'gold-plated' },
-              ],
-            },
-          ],
-        },
-        {
           label: 'Dimensions',
           fields: [
             {
