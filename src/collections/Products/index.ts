@@ -14,9 +14,9 @@ const Products: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    useAsTitle: 'title', // This field shows in admin list
+    useAsTitle: 'title',
     defaultColumns: ['title', 'price', 'inventory.quantity', 'status'],
-    group: 'Shop', // Groups collections in admin sidebar
+    group: 'Shop',
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
@@ -74,15 +74,7 @@ const Products: CollectionConfig = {
         description: 'Brief description for listings',
       },
     },
-    {
-      name: 'price',
-      type: 'number',
-      required: true,
-      min: 0,
-      admin: {
-        step: 0.01,
-      },
-    },
+
     {
       name: 'images',
       type: 'array',
@@ -102,83 +94,31 @@ const Products: CollectionConfig = {
         },
       ],
     },
-
     {
-      type: 'tabs',
-      tabs: [
-        {
-          label: 'Dimensions',
-          fields: [
-            {
-              name: 'height',
-              type: 'number',
-              required: true,
-            },
-            {
-              name: 'width',
-              type: 'number',
-              required: true,
-            },
-            {
-              name: 'depth',
-              type: 'number',
-              required: true,
-            },
-            {
-              name: 'weight',
-              type: 'number',
-              required: true,
-            },
-          ],
-        },
-        {
-          label: 'Origin',
-          fields: [
-            {
-              name: 'origin',
-              type: 'text',
-              admin: {
-                description: 'Where the statue was made',
-              },
-            },
-          ],
-        },
-      ],
-    },
-
-    {
-      name: 'inventory',
+      name: 'Origin',
       type: 'group',
       fields: [
         {
-          name: 'quantity',
-          type: 'number',
-          required: true,
-          defaultValue: 0,
-          min: 0,
-        },
-        {
-          name: 'sku',
+          name: 'origin',
           type: 'text',
-          unique: true,
           admin: {
-            description: 'Stock keeping unit',
+            description: 'Where the statue was made',
           },
-        },
-        {
-          name: 'lowStockThreshold',
-          type: 'number',
-          defaultValue: 5,
-          admin: {
-            description: 'Alert when stock falls below this',
-          },
-        },
-        {
-          name: 'trackInventory',
-          type: 'checkbox',
-          defaultValue: true,
         },
       ],
+    },
+    {
+      name: 'variants',
+      type: 'relationship',
+      relationTo: 'variants',
+      hasMany: true,
+      filterOptions: ({ id }) => {
+        return {
+          product: {
+            equals: id,
+          },
+        }
+      },
     },
     {
       name: 'seo',

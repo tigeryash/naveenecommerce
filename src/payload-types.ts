@@ -70,6 +70,12 @@ export interface Config {
     users: User;
     media: Media;
     products: Product;
+    variants: Variant;
+    sizes: Size;
+    materials: Material;
+    finishes: Finish;
+    deities: Deity;
+    categories: Category;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +86,12 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    variants: VariantsSelect<false> | VariantsSelect<true>;
+    sizes: SizesSelect<false> | SizesSelect<true>;
+    materials: MaterialsSelect<false> | MaterialsSelect<true>;
+    finishes: FinishesSelect<false> | FinishesSelect<true>;
+    deities: DeitiesSelect<false> | DeitiesSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -196,32 +208,18 @@ export interface Product {
    * Brief description for listings
    */
   shortDescription?: string | null;
-  price: number;
   images: {
     image: number | Media;
     alt: string;
     id?: string | null;
   }[];
-  height: number;
-  width: number;
-  depth: number;
-  weight: number;
-  /**
-   * Where the statue was made
-   */
-  origin?: string | null;
-  inventory: {
-    quantity: number;
+  Origin?: {
     /**
-     * Stock keeping unit
+     * Where the statue was made
      */
-    sku?: string | null;
-    /**
-     * Alert when stock falls below this
-     */
-    lowStockThreshold?: number | null;
-    trackInventory?: boolean | null;
+    origin?: string | null;
   };
+  variants?: (number | Variant)[] | null;
   seo?: {
     title?: string | null;
     description?: string | null;
@@ -238,6 +236,104 @@ export interface Product {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "variants".
+ */
+export interface Variant {
+  id: number;
+  product: number | Product;
+  size: number | Size;
+  height: number;
+  width: number;
+  depth: number;
+  weight: number;
+  price: number;
+  /**
+   * Unique Stock Keeping Unit for this variant.
+   */
+  sku: string;
+  trackInventory?: boolean | null;
+  quantity: number;
+  /**
+   * Alert when stock falls below this
+   */
+  lowStockThreshold?: number | null;
+  images?:
+    | {
+        image: number | Media;
+        alt: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sizes".
+ */
+export interface Size {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "materials".
+ */
+export interface Material {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "finishes".
+ */
+export interface Finish {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "deities".
+ */
+export interface Deity {
+  id: number;
+  name: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -351,6 +447,30 @@ export interface PayloadLockedDocument {
         value: number | Product;
       } | null)
     | ({
+        relationTo: 'variants';
+        value: number | Variant;
+      } | null)
+    | ({
+        relationTo: 'sizes';
+        value: number | Size;
+      } | null)
+    | ({
+        relationTo: 'materials';
+        value: number | Material;
+      } | null)
+    | ({
+        relationTo: 'finishes';
+        value: number | Finish;
+      } | null)
+    | ({
+        relationTo: 'deities';
+        value: number | Deity;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
         relationTo: 'payload-jobs';
         value: number | PayloadJob;
       } | null);
@@ -445,7 +565,6 @@ export interface ProductsSelect<T extends boolean = true> {
   slug?: T;
   description?: T;
   shortDescription?: T;
-  price?: T;
   images?:
     | T
     | {
@@ -453,19 +572,12 @@ export interface ProductsSelect<T extends boolean = true> {
         alt?: T;
         id?: T;
       };
-  height?: T;
-  width?: T;
-  depth?: T;
-  weight?: T;
-  origin?: T;
-  inventory?:
+  Origin?:
     | T
     | {
-        quantity?: T;
-        sku?: T;
-        lowStockThreshold?: T;
-        trackInventory?: T;
+        origin?: T;
       };
+  variants?: T;
   seo?:
     | T
     | {
@@ -478,6 +590,78 @@ export interface ProductsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "variants_select".
+ */
+export interface VariantsSelect<T extends boolean = true> {
+  product?: T;
+  size?: T;
+  height?: T;
+  width?: T;
+  depth?: T;
+  weight?: T;
+  price?: T;
+  sku?: T;
+  trackInventory?: T;
+  quantity?: T;
+  lowStockThreshold?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sizes_select".
+ */
+export interface SizesSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "materials_select".
+ */
+export interface MaterialsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "finishes_select".
+ */
+export interface FinishesSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "deities_select".
+ */
+export interface DeitiesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
