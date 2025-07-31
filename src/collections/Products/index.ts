@@ -5,6 +5,14 @@ import { revalidateDelete, revalidatePost } from './hooks/revalidateProduct'
 import { populateAuthors } from './hooks/populateAuthors'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 
+import {
+  MetaDescriptionField,
+  MetaImageField,
+  MetaTitleField,
+  OverviewField,
+  PreviewField,
+} from '@payloadcms/plugin-seo/fields'
+
 const Products: CollectionConfig = {
   slug: 'products',
   access: {
@@ -108,6 +116,42 @@ const Products: CollectionConfig = {
       ],
     },
     {
+      name: 'deity',
+      type: 'relationship',
+      relationTo: 'deities',
+      required: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'materials',
+      type: 'relationship',
+      relationTo: 'materials',
+      hasMany: true, // A statue could be brass and wood
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'finishes',
+      type: 'relationship',
+      relationTo: 'finishes',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'categories',
+      type: 'relationship',
+      relationTo: 'categories',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'variants',
       type: 'relationship',
       relationTo: 'variants',
@@ -124,16 +168,19 @@ const Products: CollectionConfig = {
       name: 'seo',
       type: 'group',
       fields: [
-        {
-          name: 'title',
-          type: 'text',
-          maxLength: 60,
-        },
-        {
-          name: 'description',
-          type: 'textarea',
-          maxLength: 160,
-        },
+        OverviewField({
+          titlePath: 'meta.title',
+          descriptionPath: 'meta.description',
+          imagePath: 'meta.image',
+        }),
+        MetaTitleField({
+          hasGenerateFn: true,
+        }),
+        MetaImageField({
+          relationTo: 'media',
+        }),
+
+        MetaDescriptionField({}),
         {
           name: 'keywords',
           type: 'text',
