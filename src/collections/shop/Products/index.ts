@@ -1,6 +1,6 @@
 import { CollectionConfig } from 'payload'
-import { authenticated } from '../../access/authenticated'
-import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { authenticated } from '../../../access/authenticated'
+import { authenticatedOrPublished } from '../../../access/authenticatedOrPublished'
 import { revalidateDelete, revalidatePost } from './hooks/revalidateProduct'
 import { populateAuthors } from './hooks/populateAuthors'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
@@ -103,17 +103,13 @@ const Products: CollectionConfig = {
       ],
     },
     {
-      name: 'Origin',
-      type: 'group',
-      fields: [
-        {
-          name: 'origin',
-          type: 'text',
-          admin: {
-            description: 'Where the statue was made',
-          },
-        },
-      ],
+      name: 'origin',
+      type: 'relationship',
+      relationTo: 'origin',
+      required: true,
+      admin: {
+        position: 'sidebar',
+      },
     },
     {
       name: 'deity',
@@ -142,6 +138,7 @@ const Products: CollectionConfig = {
         position: 'sidebar',
       },
     },
+
     {
       name: 'categories',
       type: 'relationship',

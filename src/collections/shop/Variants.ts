@@ -41,12 +41,12 @@ export const Variants: CollectionConfig = {
       type: 'number',
       required: true,
     },
-    // {
-    //   name: 'color',
-    //   type: 'relationship',
-    //   relationTo: 'colors', // Relate to your new Colors collection
-    //   required: true,
-    // },
+    {
+      name: 'color',
+      type: 'relationship',
+      relationTo: 'colors', // Relate to your new Colors collection
+      required: true,
+    },
     {
       name: 'price', // This is the price for this specific variant
       type: 'number',

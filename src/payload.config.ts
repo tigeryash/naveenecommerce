@@ -8,15 +8,18 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 // import { migrations } from './migrations'
 
-import { Users } from './collections/Users'
+import { Users } from './collections/users/Users'
 import { Media } from './collections/Media'
-import Products from './collections/Products'
-import { Variants } from './collections/Variants'
-import { Sizes } from './collections/Sizes'
-import Finishes from './collections/Finishes'
-import Deities from './collections/Deities'
-import { Categories } from './collections/Categories'
-import Materials from './collections/Materials'
+import Products from './collections/shop/Products'
+import { Variants } from './collections/shop/Variants'
+import { Sizes } from './collections/shop/attributes/Sizes'
+import Finishes from './collections/shop/attributes/Finishes'
+import Deities from './collections/shop/attributes/Deities'
+import { Categories } from './collections/shop/attributes/Categories'
+import Materials from './collections/shop/attributes/Materials'
+import { Colors } from './collections/shop/attributes/Colors'
+import { Origin } from './collections/shop/attributes/Origin'
+import { Discounts } from './collections/shop/Discounts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -50,7 +53,20 @@ export default buildConfig({
       ],
     },
   },
-  collections: [Users, Media, Products, Variants, Sizes, Materials, Finishes, Deities, Categories],
+  collections: [
+    Users,
+    Media,
+    Products,
+    Variants,
+    Sizes,
+    Materials,
+    Finishes,
+    Deities,
+    Categories,
+    Colors,
+    Origin,
+    Discounts,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

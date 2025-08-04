@@ -76,6 +76,9 @@ export interface Config {
     finishes: Finish;
     deities: Deity;
     categories: Category;
+    colors: Color;
+    origin: Origin;
+    discounts: Discount;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +95,9 @@ export interface Config {
     finishes: FinishesSelect<false> | FinishesSelect<true>;
     deities: DeitiesSelect<false> | DeitiesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    colors: ColorsSelect<false> | ColorsSelect<true>;
+    origin: OriginSelect<false> | OriginSelect<true>;
+    discounts: DiscountsSelect<false> | DiscountsSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -141,6 +147,8 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  name: string;
+  role?: ('admin' | 'customer')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -213,12 +221,7 @@ export interface Product {
     alt: string;
     id?: string | null;
   }[];
-  Origin?: {
-    /**
-     * Where the statue was made
-     */
-    origin?: string | null;
-  };
+  origin: number | Origin;
   deity: number | Deity;
   materials?: (number | Material)[] | null;
   finishes?: (number | Finish)[] | null;
@@ -244,6 +247,19 @@ export interface Product {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "origin".
+ */
+export interface Origin {
+  id: number;
+  /**
+   * Where the statue was made
+   */
+  name: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -297,6 +313,8 @@ export interface Finish {
 export interface Category {
   id: number;
   title: string;
+  description?: string | null;
+  parent?: (number | null) | Category;
   updatedAt: string;
   createdAt: string;
 }
@@ -312,6 +330,7 @@ export interface Variant {
   width: number;
   depth: number;
   weight: number;
+  color: number | Color;
   price: number;
   /**
    * Unique Stock Keeping Unit for this variant.
@@ -340,6 +359,56 @@ export interface Variant {
 export interface Size {
   id: number;
   name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "colors".
+ */
+export interface Color {
+  id: number;
+  name: string;
+  color: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "discounts".
+ */
+export interface Discount {
+  id: number;
+  /**
+   * A name for this discount for internal reference (e.g., "Diwali Sale 2025").
+   */
+  name: string;
+  requiresCode?: boolean | null;
+  /**
+   * The code a customer will enter at checkout. Required if the box above is checked.
+   */
+  code?: string | null;
+  type: 'percentage' | 'fixedAmount';
+  percent?: number | null;
+  amount?: number | null;
+  appliesTo: 'order' | 'products' | 'categories';
+  requiredProducts?: (number | Product)[] | null;
+  requiredCategories?: (number | Category)[] | null;
+  /**
+   * The cart total must be at least this amount.
+   */
+  minimumCartValue?: number | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  /**
+   * The total number of times this code can be used by anyone.
+   */
+  usageLimit?: number | null;
+  usageCount?: number | null;
+  /**
+   * How many times a single logged-in user can use this code.
+   */
+  limitPerUser?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -479,6 +548,18 @@ export interface PayloadLockedDocument {
         value: number | Category;
       } | null)
     | ({
+        relationTo: 'colors';
+        value: number | Color;
+      } | null)
+    | ({
+        relationTo: 'origin';
+        value: number | Origin;
+      } | null)
+    | ({
+        relationTo: 'discounts';
+        value: number | Discount;
+      } | null)
+    | ({
         relationTo: 'payload-jobs';
         value: number | PayloadJob;
       } | null);
@@ -529,6 +610,8 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -580,11 +663,7 @@ export interface ProductsSelect<T extends boolean = true> {
         alt?: T;
         id?: T;
       };
-  Origin?:
-    | T
-    | {
-        origin?: T;
-      };
+  origin?: T;
   deity?: T;
   materials?: T;
   finishes?: T;
@@ -615,6 +694,7 @@ export interface VariantsSelect<T extends boolean = true> {
   width?: T;
   depth?: T;
   weight?: T;
+  color?: T;
   price?: T;
   sku?: T;
   trackInventory?: T;
@@ -673,6 +753,50 @@ export interface DeitiesSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
+  parent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "colors_select".
+ */
+export interface ColorsSelect<T extends boolean = true> {
+  name?: T;
+  color?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "origin_select".
+ */
+export interface OriginSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "discounts_select".
+ */
+export interface DiscountsSelect<T extends boolean = true> {
+  name?: T;
+  requiresCode?: T;
+  code?: T;
+  type?: T;
+  percent?: T;
+  amount?: T;
+  appliesTo?: T;
+  requiredProducts?: T;
+  requiredCategories?: T;
+  minimumCartValue?: T;
+  startDate?: T;
+  endDate?: T;
+  usageLimit?: T;
+  usageCount?: T;
+  limitPerUser?: T;
   updatedAt?: T;
   createdAt?: T;
 }
