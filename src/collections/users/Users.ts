@@ -1,11 +1,12 @@
 import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
+import { anyone } from '@/access/anyone'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
     admin: authenticated,
-    create: authenticated,
+    create: anyone,
     delete: authenticated,
     read: authenticated,
     update: authenticated,
@@ -60,7 +61,12 @@ export const Users: CollectionConfig = {
       relationTo: 'wishList',
       hasMany: true,
     },
-    {},
+    {
+      name: 'paymentMethods',
+      type: 'relationship',
+      relationTo: 'paymentInfo',
+      hasMany: true,
+    },
   ],
   timestamps: true,
 }
