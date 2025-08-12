@@ -162,6 +162,14 @@ const Products: CollectionConfig = {
       },
     },
     {
+      name: 'ratingDistribution',
+      type: 'array',
+      fields: [
+        { name: 'stars', type: 'number' }, // 1-5
+        { name: 'count', type: 'number' },
+      ],
+    },
+    {
       name: 'seo',
       type: 'group',
       fields: [

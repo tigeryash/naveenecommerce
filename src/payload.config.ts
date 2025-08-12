@@ -19,6 +19,10 @@ import { Categories } from './collections/shop/attributes/Categories'
 import Materials from './collections/shop/attributes/Materials'
 import { Colors } from './collections/shop/attributes/Colors'
 import { Origin } from './collections/shop/attributes/Origin'
+import { Orders } from './collections/orders/Orders'
+import { ShippingInfo } from './collections/orders/ShippingInfo'
+import { PaymentInfo } from './collections/orders/PaymentInfo'
+import { Reviews } from './collections/users/Reviews'
 import { Discounts } from './collections/shop/Discounts'
 
 const filename = fileURLToPath(import.meta.url)
@@ -66,6 +70,10 @@ export default buildConfig({
     Colors,
     Origin,
     Discounts,
+    Orders,
+    ShippingInfo,
+    PaymentInfo,
+    Reviews,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

@@ -45,7 +45,7 @@ export const Discounts: CollectionConfig = {
                   'The code a customer will enter at checkout. Required if the box above is checked.',
                 condition: ({ requiresCode }) => requiresCode,
               },
-              validate: (value, { data }) => {
+              validate: (value: string | null | undefined, { data }: any) => {
                 if (data.requiresCode && !value) {
                   return 'Code is required for this discount type.'
                 }

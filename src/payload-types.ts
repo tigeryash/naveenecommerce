@@ -79,6 +79,10 @@ export interface Config {
     colors: Color;
     origin: Origin;
     discounts: Discount;
+    orders: Order;
+    shippingInfo: ShippingInfo;
+    paymentInfo: PaymentInfo;
+    reviews: Review;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -98,6 +102,10 @@ export interface Config {
     colors: ColorsSelect<false> | ColorsSelect<true>;
     origin: OriginSelect<false> | OriginSelect<true>;
     discounts: DiscountsSelect<false> | DiscountsSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
+    shippingInfo: ShippingInfoSelect<false> | ShippingInfoSelect<true>;
+    paymentInfo: PaymentInfoSelect<false> | PaymentInfoSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -231,6 +239,13 @@ export interface Product {
   finishes?: (number | Finish)[] | null;
   categories?: (number | Category)[] | null;
   variants?: (number | Variant)[] | null;
+  ratingDistribution?:
+    | {
+        stars?: number | null;
+        count?: number | null;
+        id?: string | null;
+      }[]
+    | null;
   seo?: {
     title?: string | null;
     /**
@@ -418,6 +433,88 @@ export interface Discount {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: number;
+  user: number | User;
+  items: {
+    product: number | Product;
+    quantity: number;
+    price: number;
+    id?: string | null;
+  }[];
+  total: number;
+  status?: ('pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled') | null;
+  stripeSessionId?: string | null;
+  shippingInfo?: (number | null) | ShippingInfo;
+  paymentInfo?: (number | null) | PaymentInfo;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shippingInfo".
+ */
+export interface ShippingInfo {
+  id: number;
+  user: number | User;
+  addressName?: string | null;
+  addressLine1: string;
+  addressLine2?: string | null;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  isDefault?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "paymentInfo".
+ */
+export interface PaymentInfo {
+  id: number;
+  user: number | User;
+  stripeCustomerId: string;
+  stripePaymentMethodId: string;
+  brand?: string | null;
+  last4?: string | null;
+  expMonth?: number | null;
+  expYear?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: number;
+  user: number | User;
+  product: number | Product;
+  rating: number;
+  title?: string | null;
+  comment?: string | null;
+  images?:
+    | {
+        image: number | Media;
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  helpfulCount?: number | null;
+  notHelpfulCount?: number | null;
+  /**
+   * Only approved reviews are shown publicly
+   */
+  approved?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
@@ -564,6 +661,22 @@ export interface PayloadLockedDocument {
         value: number | Discount;
       } | null)
     | ({
+        relationTo: 'orders';
+        value: number | Order;
+      } | null)
+    | ({
+        relationTo: 'shippingInfo';
+        value: number | ShippingInfo;
+      } | null)
+    | ({
+        relationTo: 'paymentInfo';
+        value: number | PaymentInfo;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: number | Review;
+      } | null)
+    | ({
         relationTo: 'payload-jobs';
         value: number | PayloadJob;
       } | null);
@@ -677,6 +790,13 @@ export interface ProductsSelect<T extends boolean = true> {
   finishes?: T;
   categories?: T;
   variants?: T;
+  ratingDistribution?:
+    | T
+    | {
+        stars?: T;
+        count?: T;
+        id?: T;
+      };
   seo?:
     | T
     | {
@@ -805,6 +925,83 @@ export interface DiscountsSelect<T extends boolean = true> {
   usageLimit?: T;
   usageCount?: T;
   limitPerUser?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  user?: T;
+  items?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        price?: T;
+        id?: T;
+      };
+  total?: T;
+  status?: T;
+  stripeSessionId?: T;
+  shippingInfo?: T;
+  paymentInfo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shippingInfo_select".
+ */
+export interface ShippingInfoSelect<T extends boolean = true> {
+  user?: T;
+  addressName?: T;
+  addressLine1?: T;
+  addressLine2?: T;
+  city?: T;
+  state?: T;
+  postalCode?: T;
+  country?: T;
+  isDefault?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "paymentInfo_select".
+ */
+export interface PaymentInfoSelect<T extends boolean = true> {
+  user?: T;
+  stripeCustomerId?: T;
+  stripePaymentMethodId?: T;
+  brand?: T;
+  last4?: T;
+  expMonth?: T;
+  expYear?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  user?: T;
+  product?: T;
+  rating?: T;
+  title?: T;
+  comment?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
+  helpfulCount?: T;
+  notHelpfulCount?: T;
+  approved?: T;
   updatedAt?: T;
   createdAt?: T;
 }
