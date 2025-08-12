@@ -162,6 +162,20 @@ const Products: CollectionConfig = {
       },
     },
     {
+      name: 'totalReviews',
+      type: 'number',
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'averageRating',
+      type: 'number',
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'ratingDistribution',
       type: 'array',
       fields: [

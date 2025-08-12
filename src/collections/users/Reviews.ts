@@ -1,6 +1,8 @@
 import type { CollectionConfig, PayloadHandler, PayloadRequest } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { selfOrAdmin } from '../../access/selfOrAdmin'
+import { voteReview } from './endpoints/voteReview'
+import { updateProductReviewStats } from './hooks/updateProductReviewStats'
 
 export const Reviews: CollectionConfig = {
   slug: 'reviews',
@@ -85,42 +87,54 @@ export const Reviews: CollectionConfig = {
         description: 'Only approved reviews are shown publicly',
       },
     },
+    {
+      name: 'votedUsers',
+      type: 'array',
+      access: {
+        create: () => false, // prevent manual creation
+        update: () => false, // only updated via endpoint
+      },
+      fields: [
+        {
+          name: 'user',
+          type: 'relationship',
+          relationTo: 'users',
+          required: true,
+        },
+        {
+          name: 'type',
+          type: 'select',
+          options: ['helpful', 'notHelpful'],
+          required: true,
+        },
+      ],
+      admin: {
+        hidden: true, // hide from admin UI
+      },
+    },
   ],
   endpoints: [
     {
       path: '/:id/vote',
       method: 'post',
-      handler: (async (req: PayloadRequest) => {
-        if (!req.json) {
-          return new Response(JSON.stringify({ error: 'Invalid request' }), {
-            status: 400,
-            headers: { 'Content-Type': 'application/json' },
-          })
-        }
-
-        const { type } = await req.json()
-        const reviewId = req.routeParams?.id
-        const field = type === 'helpful' ? 'helpfulCount' : 'notHelpfulCount'
-
-        const review = await req.payload.update({
-          collection: 'reviews',
-          id: reviewId,
-          data: {
-            [field]: {
-              increment: 1,
-            },
-          },
-        })
-
-        return new Response(
-          JSON.stringify({
-            helpfulCount: review.helpfulCount,
-            notHelpfulCount: review.notHelpfulCount,
-          }),
-          { status: 200, headers: { 'Content-Type': 'application/json' } },
-        )
-      }) as PayloadHandler,
+      handler: voteReview,
     },
   ],
+  hooks: {
+    afterChange: [
+      async ({ doc, req }) => {
+        if (doc.approved) {
+          await updateProductReviewStats(doc.product, req.payload)
+        }
+      },
+    ],
+    afterDelete: [
+      async ({ doc, req }) => {
+        if (doc.approved) {
+          await updateProductReviewStats(doc.product, req.payload)
+        }
+      },
+    ],
+  },
   timestamps: true,
 }
