@@ -3,6 +3,8 @@ import { authenticated } from '../../access/authenticated'
 import { selfOrAdmin } from '../../access/selfOrAdmin'
 import { voteReview } from './endpoints/voteReview'
 import { updateProductReviewStats } from './hooks/updateProductReviewStats'
+import { isVerified } from './hooks/isVerified'
+import { recalculateStats } from './hooks/recalculateStats'
 
 export const Reviews: CollectionConfig = {
   slug: 'reviews',
@@ -29,6 +31,12 @@ export const Reviews: CollectionConfig = {
       type: 'relationship',
       relationTo: 'products',
       required: true,
+    },
+    {
+      name: 'verifiedPurchase',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: { position: 'sidebar' },
     },
     {
       name: 'rating',
@@ -88,6 +96,18 @@ export const Reviews: CollectionConfig = {
       },
     },
     {
+      name: 'reply',
+      type: 'richText',
+      access: {
+        create: ({ req }) => Boolean(req.user?.role?.includes('admin')),
+        update: ({ req }) => Boolean(req.user?.role?.includes('admin')),
+        read: () => true,
+      },
+      admin: {
+        description: 'A public reply from the store owner to this review.',
+      },
+    },
+    {
       name: 'votedUsers',
       type: 'array',
       access: {
@@ -121,13 +141,8 @@ export const Reviews: CollectionConfig = {
     },
   ],
   hooks: {
-    afterChange: [
-      async ({ doc, req }) => {
-        if (doc.approved) {
-          await updateProductReviewStats(doc.product, req.payload)
-        }
-      },
-    ],
+    beforeChange: [async ({ data, req, operation }) => await isVerified({ data, req, operation })],
+    afterChange: [recalculateStats],
     afterDelete: [
       async ({ doc, req }) => {
         if (doc.approved) {

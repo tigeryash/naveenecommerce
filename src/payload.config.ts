@@ -10,7 +10,7 @@ import sharp from 'sharp'
 
 import { Users } from './collections/users/Users'
 import { Media } from './collections/Media'
-import Products from './collections/shop/Products'
+import Products from './collections/Products'
 import { Variants } from './collections/shop/Variants'
 import { Sizes } from './collections/shop/attributes/Sizes'
 import Finishes from './collections/shop/attributes/Finishes'
@@ -22,7 +22,7 @@ import { Origin } from './collections/shop/attributes/Origin'
 import { Orders } from './collections/orders/Orders'
 import { ShippingInfo } from './collections/orders/ShippingInfo'
 import { PaymentInfo } from './collections/orders/PaymentInfo'
-import { Reviews } from './collections/users/Reviews'
+import { Reviews } from './collections/reviews/Reviews'
 import { Discounts } from './collections/shop/Discounts'
 
 const filename = fileURLToPath(import.meta.url)

@@ -1,4 +1,3 @@
-// collections/users/hooks/updateProductReviewStats.ts
 export async function updateProductReviewStats(productId: string, payload: any) {
   const reviews = await payload.find({
     collection: 'reviews',
@@ -10,12 +9,28 @@ export async function updateProductReviewStats(productId: string, payload: any) 
   })
 
   const totalReviews = reviews.totalDocs
-  const ratingSum = reviews.docs.reduce((sum, r) => sum + r.rating, 0)
+  let ratingSum = 0
+  const ratingCounts = new Map([
+    [5, 0],
+    [4, 0],
+    [3, 0],
+    [2, 0],
+    [1, 0],
+  ])
+
+  // Calculate sum and distribution in one loop
+  for (const review of reviews.docs) {
+    ratingSum += review.rating
+    if (ratingCounts.has(review.rating)) {
+      ratingCounts.set(review.rating, ratingCounts.get(review.rating)! + 1)
+    }
+  }
+
   const averageRating = totalReviews > 0 ? ratingSum / totalReviews : 0
 
-  const distribution = [1, 2, 3, 4, 5].map((stars) => ({
+  const distribution = Array.from(ratingCounts.entries()).map(([stars, count]) => ({
     stars,
-    count: reviews.docs.filter((r) => r.rating === stars).length,
+    count,
   }))
 
   await payload.update({

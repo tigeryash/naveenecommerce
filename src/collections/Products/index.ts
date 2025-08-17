@@ -12,6 +12,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { deleteProductReviews } from './hooks/deleteProductReviews'
 
 const Products: CollectionConfig = {
   slug: 'products',
@@ -232,7 +233,7 @@ const Products: CollectionConfig = {
   hooks: {
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
-    afterDelete: [revalidateDelete],
+    afterDelete: [revalidateDelete, deleteProductReviews],
   },
   versions: {
     drafts: {

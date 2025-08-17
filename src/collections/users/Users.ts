@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { selfOrAdmin } from '../../access/selfOrAdmin'
 import { anyone } from '@/access/anyone'
-import { protectRoles } from './hooks/protectRoles'
+import { protectRoles } from '../reviews/hooks/protectRoles'
 
 export const Users: CollectionConfig = {
   slug: 'users',
