@@ -30,7 +30,7 @@ export const voteReview: PayloadHandler = async (req) => {
     id: reviewId,
   })
 
-  const existingVoteIndex = review.votedUsers?.findIndex((vote) => vote.user === req.user.id)
+  const existingVoteIndex = review.votedUsers?.findIndex((vote) => vote.user === req.user?.id)
 
   let updatedHelpful = review.helpfulCount || 0
   let updatedNotHelpful = review.notHelpfulCount || 0

@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { selfOrAdmin } from '../../access/selfOrAdmin'
 import { anyone } from '@/access/anyone'
-import { protectRoles } from '../reviews/hooks/protectRoles'
+import { protectRoles } from '../users/hooks/protectRoles'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -58,12 +58,7 @@ export const Users: CollectionConfig = {
       saveToJWT: true,
       defaultValue: ['customer'],
       hasMany: true,
-      access: {
-        create: () => true,
-        update: ({ req: { user } }) => {
-          return user?.role?.includes('admin') || false
-        },
-      },
+
       hooks: {
         beforeChange: [protectRoles],
       },

@@ -239,6 +239,8 @@ export interface Product {
   finishes?: (number | Finish)[] | null;
   categories?: (number | Category)[] | null;
   variants?: (number | Variant)[] | null;
+  totalReviews?: number | null;
+  averageRating?: number | null;
   ratingDistribution?:
     | {
         stars?: number | null;
@@ -494,6 +496,7 @@ export interface Review {
   id: number;
   user: number | User;
   product: number | Product;
+  verifiedPurchase?: boolean | null;
   rating: number;
   title?: string | null;
   comment?: string | null;
@@ -510,6 +513,31 @@ export interface Review {
    * Only approved reviews are shown publicly
    */
   approved?: boolean | null;
+  /**
+   * A public reply from the store owner to this review.
+   */
+  reply?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  votedUsers?:
+    | {
+        user: number | User;
+        type: 'helpful' | 'notHelpful';
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -790,6 +818,8 @@ export interface ProductsSelect<T extends boolean = true> {
   finishes?: T;
   categories?: T;
   variants?: T;
+  totalReviews?: T;
+  averageRating?: T;
   ratingDistribution?:
     | T
     | {
@@ -989,6 +1019,7 @@ export interface PaymentInfoSelect<T extends boolean = true> {
 export interface ReviewsSelect<T extends boolean = true> {
   user?: T;
   product?: T;
+  verifiedPurchase?: T;
   rating?: T;
   title?: T;
   comment?: T;
@@ -1002,6 +1033,14 @@ export interface ReviewsSelect<T extends boolean = true> {
   helpfulCount?: T;
   notHelpfulCount?: T;
   approved?: T;
+  reply?: T;
+  votedUsers?:
+    | T
+    | {
+        user?: T;
+        type?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

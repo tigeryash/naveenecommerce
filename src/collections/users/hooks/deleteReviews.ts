@@ -21,7 +21,8 @@ export const deleteUserReviews: AfterDeleteHook = async ({ req, id }) => {
       const reviewIdsToDelete = reviews.docs.map((review) => {
         // Collect the unique product IDs whose stats we need to recalculate
         if (review.product) {
-          productIdsToUpdate.add(review.product as string)
+          const productId = typeof review.product === 'object' ? review.product.id : review.product
+          productIdsToUpdate.add(String(productId))
         }
         return review.id
       })

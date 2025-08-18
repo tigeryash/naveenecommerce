@@ -4,7 +4,8 @@ export const Variants: CollectionConfig = {
   slug: 'variants', // Or 'product-variants'
   admin: {
     // useAsTitle: 'title',
-    defaultColumns: ['title', 'product', 'size', 'color', 'price', 'sku', 'quantity'],
+    useAsTitle: 'product',
+    defaultColumns: ['product', 'size', 'color', 'price', 'sku', 'quantity'],
     group: 'Shop', // Or a new 'Product Management' group
   },
   fields: [

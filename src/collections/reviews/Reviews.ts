@@ -48,10 +48,12 @@ export const Reviews: CollectionConfig = {
     {
       name: 'title',
       type: 'text',
+      maxLength: 100,
     },
     {
       name: 'comment',
       type: 'textarea',
+      maxLength: 2500,
     },
     {
       name: 'images',
@@ -141,7 +143,7 @@ export const Reviews: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeChange: [async ({ data, req, operation }) => await isVerified({ data, req, operation })],
+    beforeChange: [isVerified],
     afterChange: [recalculateStats],
     afterDelete: [
       async ({ doc, req }) => {

@@ -1,6 +1,6 @@
 import { CollectionConfig } from 'payload'
-import { authenticated } from '../../../access/authenticated'
-import { authenticatedOrPublished } from '../../../access/authenticatedOrPublished'
+import { authenticated } from '@/access/authenticated'
+import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 import { revalidateDelete, revalidatePost } from './hooks/revalidateProduct'
 import { populateAuthors } from './hooks/populateAuthors'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
@@ -10,7 +10,6 @@ import {
   MetaImageField,
   MetaTitleField,
   OverviewField,
-  PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { deleteProductReviews } from './hooks/deleteProductReviews'
 

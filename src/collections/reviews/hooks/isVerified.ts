@@ -1,7 +1,7 @@
-import { User } from '@/payload-types'
+import { Review } from '@/payload-types'
 import { CollectionBeforeChangeHook } from 'payload'
 
-export const isVerified: CollectionBeforeChangeHook<User> = async ({ data, operation, req }) => {
+export const isVerified: CollectionBeforeChangeHook<Review> = async ({ data, operation, req }) => {
   if (operation === 'create') {
     // 1. Ensure logged in
     if (!req.user) {
