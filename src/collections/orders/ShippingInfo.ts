@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { selfOrAdmin } from '../../access/selfOrAdmin'
 import { authenticated } from '../../access/authenticated'
+import { newDefaultAddress } from './hooks/newDefaultAddress'
 
 export const ShippingInfo: CollectionConfig = {
   slug: 'shippingInfo',
@@ -68,4 +69,7 @@ export const ShippingInfo: CollectionConfig = {
       defaultValue: false,
     },
   ],
+  hooks: {
+    beforeChange: [newDefaultAddress],
+  },
 }
