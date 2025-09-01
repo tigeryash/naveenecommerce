@@ -1,6 +1,7 @@
 import { drizzle } from '@payloadcms/db-postgres/drizzle/node-postgres'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import * as schema from '@/payload-generated-schema'
 
 const db = drizzle(process.env.DATABASE_URI as string)
 
@@ -31,5 +32,12 @@ export const auth = betterAuth({
   },
   session: {
     modelName: 'user_sessions',
+  },
+  socialProviders: {
+    google: {
+      prompt: 'select_account',
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
   },
 })

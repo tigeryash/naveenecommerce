@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 // import { migrations } from './migrations'
 
-import { Users } from './collections/users/Users'
+import { Users } from './collections/auth/users/Users'
 import { Media } from './collections/Media'
 import Products from './collections/Products'
 import { Variants } from './collections/shop/Variants'
@@ -24,6 +24,9 @@ import { ShippingInfo } from './collections/orders/ShippingInfo'
 import { PaymentInfo } from './collections/orders/PaymentInfo'
 import { Reviews } from './collections/reviews/Reviews'
 import { Discounts } from './collections/shop/Discounts'
+import { Accounts } from './collections/auth/Account'
+import { Sessions } from './collections/auth/Sessions'
+import { Verifications } from './collections/auth/Verifications'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -33,6 +36,14 @@ export default buildConfig({
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
+    },
+    routes: {
+      login: '/auth/sign-in',
+      createFirstUser: '/auth/sign-up',
+      forgot: '/auth/forgot-password',
+      reset: '/auth/reset-password',
+      logout: '/auth/sign-out',
+      // account: "/auth/settings" // Optional if you want to change Payload's account setting page in the admin dashboard
     },
     livePreview: {
       breakpoints: [
@@ -58,6 +69,9 @@ export default buildConfig({
     },
   },
   collections: [
+    Accounts,
+    Sessions,
+    Verifications,
     Users,
     Media,
     Products,
