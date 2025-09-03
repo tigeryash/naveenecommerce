@@ -67,6 +67,9 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    'user-accounts': UserAccount;
+    'user-sessions': UserSession;
+    'user-verifications': UserVerification;
     users: User;
     media: Media;
     products: Product;
@@ -90,6 +93,9 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    'user-accounts': UserAccountsSelect<false> | UserAccountsSelect<true>;
+    'user-sessions': UserSessionsSelect<false> | UserSessionsSelect<true>;
+    'user-verifications': UserVerificationsSelect<false> | UserVerificationsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
@@ -151,33 +157,36 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-accounts".
+ */
+export interface UserAccount {
+  id: number;
+  userId: number | User;
+  accountId: string;
+  providerId: string;
+  accessToken?: string | null;
+  refreshToken?: string | null;
+  accessTokenExpiresAt?: string | null;
+  refreshTokenExpiresAt?: string | null;
+  scope?: string | null;
+  idToken?: string | null;
+  password?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: number;
   name: string;
   avatar?: (number | null) | Media;
+  email: string;
   role?: ('admin' | 'customer')[] | null;
   wishList?: (number | Product)[] | null;
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  _verified?: boolean | null;
-  _verificationToken?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -391,6 +400,32 @@ export interface Color {
   id: number;
   name: string;
   color: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-sessions".
+ */
+export interface UserSession {
+  id: number;
+  userId: number | User;
+  token: string;
+  expiresAt: string;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-verifications".
+ */
+export interface UserVerification {
+  id: number;
+  identifier: string;
+  value: string;
+  expiresAt: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -641,6 +676,18 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'user-accounts';
+        value: number | UserAccount;
+      } | null)
+    | ({
+        relationTo: 'user-sessions';
+        value: number | UserSession;
+      } | null)
+    | ({
+        relationTo: 'user-verifications';
+        value: number | UserVerification;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -752,31 +799,58 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-accounts_select".
+ */
+export interface UserAccountsSelect<T extends boolean = true> {
+  userId?: T;
+  accountId?: T;
+  providerId?: T;
+  accessToken?: T;
+  refreshToken?: T;
+  accessTokenExpiresAt?: T;
+  refreshTokenExpiresAt?: T;
+  scope?: T;
+  idToken?: T;
+  password?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-sessions_select".
+ */
+export interface UserSessionsSelect<T extends boolean = true> {
+  userId?: T;
+  token?: T;
+  expiresAt?: T;
+  ipAddress?: T;
+  userAgent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-verifications_select".
+ */
+export interface UserVerificationsSelect<T extends boolean = true> {
+  identifier?: T;
+  value?: T;
+  expiresAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
   avatar?: T;
+  email?: T;
   role?: T;
   wishList?: T;
   updatedAt?: T;
   createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  _verified?: T;
-  _verificationToken?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

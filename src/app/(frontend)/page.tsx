@@ -5,7 +5,6 @@ import React from 'react'
 import { fileURLToPath } from 'url'
 
 import config from '@/payload.config'
-import './styles.css'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -27,7 +26,9 @@ export default async function HomePage() {
             width={65}
           />
         </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
+        {!user && (
+          <h1 className="text-[6rem] font-bold text-orange-500">Welcome to your new project.</h1>
+        )}
         {user && (
           <h1 className="text-[6rem] font-bold text-orange-500">Welcome back, {user.email}</h1>
         )}
@@ -46,7 +47,7 @@ export default async function HomePage() {
             rel="noopener noreferrer"
             target="_blank"
           >
-            Documentation
+            hello
           </a>
         </div>
       </div>

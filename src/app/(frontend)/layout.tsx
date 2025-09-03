@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import './styles.css'
+import '../../styles.css'
 import { draftMode } from 'next/headers'
 import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
