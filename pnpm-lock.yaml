@@ -11,6 +11,9 @@ importers:
       '@daveyplate/better-auth-ui':
         specifier: ^3.1.5
         version: 3.1.5(286c786d55406eacbf4f1fdab7d2cb66)
+      '@payloadcms/admin-bar':
+        specifier: 3.54.0
+        version: 3.54.0(react-dom@19.1.0(react@19.1.1))(react@19.1.1)
       '@payloadcms/db-postgres':
         specifier: 3.54.0
         version: 3.54.0(kysely@0.28.5)(payload@3.54.0(graphql@16.11.0)(typescript@5.9.2))
@@ -1460,6 +1463,12 @@ packages:
   '@nolyfill/is-core-module@1.0.39':
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
+
+  '@payloadcms/admin-bar@3.54.0':
+    resolution: {integrity: sha512-aBwwt2+C19uIaKgfeKd9DgMLQyf0GWKHs1rTkk5xtiNVUzHfazbQoSu54FivgXLTyN+zGr5q44acfNdsTZFPxw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   '@payloadcms/db-postgres@3.54.0':
     resolution: {integrity: sha512-C1tADNHHRTfXyJ6UXTPrHhDVji8kQFKPmT3R/LxOfXwMX5SQanfGx4dGotug647EuZCLgP9YH/ASmGgSFG2RjQ==}
@@ -7308,6 +7317,11 @@ snapshots:
       fastq: 1.19.1
 
   '@nolyfill/is-core-module@1.0.39': {}
+
+  '@payloadcms/admin-bar@3.54.0(react-dom@19.1.0(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      react: 19.1.1
+      react-dom: 19.1.0(react@19.1.1)
 
   '@payloadcms/db-postgres@3.54.0(kysely@0.28.5)(payload@3.54.0(graphql@16.11.0)(typescript@5.9.2))':
     dependencies:

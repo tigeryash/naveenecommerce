@@ -3,11 +3,5 @@ import { Providers } from '../../providers'
 import '../../../../styles.css'
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
-      <body>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
-  )
+  return <Providers>{children}</Providers>
 }

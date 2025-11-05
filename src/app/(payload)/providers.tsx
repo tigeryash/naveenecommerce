@@ -23,6 +23,14 @@ export function Providers({ children }: { children: ReactNode }) {
       social={{
         providers: ['google', 'facebook', 'apple'],
       }}
+      viewPaths={{
+        SIGN_IN: 'login',
+        SIGN_OUT: 'logout',
+        SIGN_UP: 'register',
+        FORGOT_PASSWORD: 'forgot',
+        RESET_PASSWORD: 'reset',
+        MAGIC_LINK: 'magic',
+      }}
     >
       {children}
     </AuthUIProvider>

@@ -98,18 +98,55 @@ export const Users: CollectionConfig = {
       path: '/logout',
       method: 'post',
       handler: async (req) => {
-        await auth.api.signOut({
-          headers: req.headers,
-        })
-        return Response.json(
-          {
-            message: 'Token revoked successfully',
-          },
-          {
-            status: 200,
+        try {
+          // First, sign out from Better Auth
+          await auth.api.signOut({
             headers: req.headers,
-          },
-        )
+          })
+
+          // Create response with cleared cookies
+          const response = new Response(
+            JSON.stringify({
+              message: 'Logged out successfully',
+            }),
+            {
+              status: 200,
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            },
+          )
+
+          // Clear all auth-related cookies
+          const cookiesToClear = [
+            'payload-token',
+            'better-auth.session_token',
+            'session-token',
+            // Add any other cookies your setup might use
+          ]
+
+          cookiesToClear.forEach((cookieName) => {
+            response.headers.append(
+              'Set-Cookie',
+              `${cookieName}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=Lax`,
+            )
+          })
+
+          return response
+        } catch (error) {
+          console.error('Logout error:', error)
+          return new Response(
+            JSON.stringify({
+              error: 'Logout failed',
+            }),
+            {
+              status: 500,
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            },
+          )
+        }
       },
     },
   ],
